@@ -1,0 +1,4 @@
+.DS_Store
+*.ccls
+.vscode/**
+compilation*
