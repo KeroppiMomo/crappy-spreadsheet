@@ -397,7 +397,12 @@ EXPRESSION_FUNCTION_IMPLEMENTATION(op_multiply) {
 EXPRESSION_FUNCTION_IMPLEMENTATION(op_divide) {
     arg_size_check(arg, 2);
     auto evaluated = arg_evaluate(arg);
-    return std::make_shared<integer>(cast_or_throw<integer>(evaluated[0])->raw / cast_or_throw<integer>(evaluated[1])->raw);
+    int64_t dividend = cast_or_throw<integer>(evaluated[0])->raw;
+    int64_t divisor = cast_or_throw<integer>(evaluated[1])->raw;
+    if (divisor == 0) {
+        throw std::make_shared<expression::error>(expression::error::values::div0);
+    }
+    return std::make_shared<integer>(dividend / divisor);
 }
 EXPRESSION_FUNCTION_IMPLEMENTATION(op_concat) {
     arg_size_check(arg, 2);
