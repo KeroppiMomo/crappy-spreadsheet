@@ -229,10 +229,10 @@ bool operator != (expression::eval_expr& left, expression::eval_expr& right) {
     return !(left == right);
 }
 
-std::string expression::integer::debug_message() const {
+std::string expression::integer::debug_message() const noexcept {
     return "integer(" + std::to_string(raw) + ")";
 }
-std::string expression::integer::cell_value(int width) const {
+std::string expression::integer::cell_value(int width) const noexcept {
     std::string full = std::to_string(raw);
     if (full.length() <= width) {
         full.insert(0, width-full.size(), ' ');
@@ -271,10 +271,10 @@ std::string expression::integer::cell_value(int width) const {
     }
 }
 
-std::string expression::text::debug_message() const {
+std::string expression::text::debug_message() const noexcept {
     return "text(" + raw + ")";
 }
-std::string expression::text::cell_value(int width) const {
+std::string expression::text::cell_value(int width) const noexcept {
     std::string res = raw.substr(0, std::min(width, (int)raw.length()));
     if (res.size() < width) {
         res.insert(res.length(), width-res.length(), ' ');
@@ -282,7 +282,7 @@ std::string expression::text::cell_value(int width) const {
     return res;
 }
 
-std::string expression::boolean::debug_message() const {
+std::string expression::boolean::debug_message() const noexcept {
     return std::string("boolean(") + (raw ? "TRUE" : "FALSE") + ")";
 }
 std::string expression::error::to_string() const {
@@ -294,15 +294,15 @@ std::string expression::error::to_string() const {
         case values::recur: return "#RECUR!";
     }
 }
-std::string expression::error::debug_message() const {
+std::string expression::error::debug_message() const noexcept {
     return "error(" + to_string() + ")";
 }
-std::string expression::error::cell_value(int width) const {
+std::string expression::error::cell_value(int width) const noexcept {
     std::string content = to_string();
     if (content.length() > width) return std::string(width, '#');
     return std::string((width-content.length())/2, ' ') + content + std::string(width - (width - content.length())/2 - content.length(), ' ');
 }
-std::string expression::boolean::cell_value(int width) const {
+std::string expression::boolean::cell_value(int width) const noexcept {
     std::string content = raw ? "TRUE" : "FALSE";
     if (content.length() > width) return std::string(width, '#');
     return std::string((width-content.length())/2, ' ') + content + std::string(width - (width - content.length())/2 - content.length(), ' ');
@@ -312,7 +312,7 @@ expression::eval_expr expression::reference::evaluate() const {
     worksheet::cell& cell = workspace::ws.cells[ref];
     return cell.calculate();
 }
-std::string expression::reference::debug_message() const {
+std::string expression::reference::debug_message() const noexcept {
     return "reference(" + std::to_string(ref.row.number) + ", " + std::to_string(ref.col.number) + ")";
 }
 
@@ -336,7 +336,7 @@ expression::function::raw expression::function::lookup(std::string name) {
 expression::eval_expr expression::function::evaluate() const {
     return lookup(name)(arg);
 }
-std::string expression::function::debug_message() const {
+std::string expression::function::debug_message() const noexcept {
     std::ostringstream stream;
     stream << "function(" << name << ", [";
     for (const std::shared_ptr<expression>& exp : arg) {

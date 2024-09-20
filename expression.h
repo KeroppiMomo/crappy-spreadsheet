@@ -29,7 +29,7 @@ struct expression {
     /**
      * Parsed expression type.
      */
-    typedef std::shared_ptr<const expression> parse_expr;
+    typedef std::shared_ptr<expression> parse_expr;
 
     /**
      * Evaluate the expression.
@@ -199,7 +199,7 @@ struct expression::reference: expression {
     std::shared_ptr<const primitive> evaluate() const override;
     worksheet_reference::cell_reference ref;
     reference(worksheet_reference::cell_reference ref): ref(ref) {}
-    std::string debug_message() const override;
+    std::string debug_message() const noexcept override;
 };
 struct expression::function: expression {
     typedef std::function<std::shared_ptr<const primitive>(const std::vector<std::shared_ptr<expression>>&)> raw;
@@ -211,7 +211,7 @@ struct expression::function: expression {
 
     function(std::string name, std::vector<std::shared_ptr<expression>> arg): name(name), arg(arg) { }
 
-    std::string debug_message() const override;
+    std::string debug_message() const noexcept override;
 
     static std::shared_ptr<const primitive> op_add(const std::vector<std::shared_ptr<expression>>& arg);
     static std::shared_ptr<const primitive> op_minus(const std::vector<std::shared_ptr<expression>>& arg);

@@ -1,5 +1,5 @@
 CC = g++
-FLAGS = -std=c++17
+FLAGS = -std=c++17 -I /opt/homebrew/Cellar/boost/1.86.0/include/
 
 .PHONY: clean
 
